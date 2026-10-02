@@ -5,9 +5,7 @@
                 <h2 class="text-xl font-bold text-gray-900">Edit User</h2>
                 <p class="text-sm text-gray-400 mt-1">Perbarui data dan hak akses user.</p>
             </div>
-            <button type="button" onclick="closeEditModal()" class="w-9 h-9 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700 flex items-center justify-center text-2xl">
-                &times;
-            </button>
+            <button type="button" onclick="closeEditModal()" class="w-9 h-9 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700 flex items-center justify-center text-2xl">&times;</button>
         </div>
         <form id="editUserForm" method="POST" class="p-6">
             @csrf
@@ -51,12 +49,8 @@
                 </select>
             </div>
             <div class="flex justify-end gap-3 mt-7 pt-5 border-t border-gray-100">
-                <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 border border-gray-300 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50">
-                    Batal
-                </button>
-                <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition">
-                    Simpan Perubahan
-                </button>
+                <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 border border-gray-300 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50">Batal</button>
+                <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition">Simpan Perubahan</button>
             </div>
         </form>
     </div>

@@ -40,7 +40,7 @@ class LoginController extends Controller
          * EXTERNAL
          *
          * Untuk sementara masih menggunakan database lokal.
-         * Nanti bagian ini diganti dengan authentication API perusahaan
+         * Nanti bagian ini diganti dengan authentication API
          * untuk user internal.
          */
         if ($user->auth_type === 'external') {

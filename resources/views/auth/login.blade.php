@@ -26,8 +26,7 @@
                 @csrf
                 <div>
                     <label for="identity" class="mb-2 block text-sm font-semibold text-slate-700">Nomor NIK</label>
-                    <input id="identity" type="text" name="identity" value="{{ old('identity') }}" autocomplete="username" required autofocus class="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-                    >
+                    <input id="identity" type="text" name="identity" value="{{ old('identity') }}" autocomplete="username" required autofocus class="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
                 </div>
                 <div>
                     <label for="password" class="mb-2 block text-sm font-semibold text-slate-700"> Kata Sandi </label>
@@ -45,14 +44,10 @@
                 <div class="flex justify-center">
                     {{-- Cloudflare Turnstile akan ditempatkan di sini --}}
                 </div>
-                <button type="submit" class="w-full rounded-lg bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300">
-                    Masuk
-                </button>
+                <button type="submit" class="w-full rounded-lg bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300">Masuk</button>
             </form>
             <div class="mt-6 text-center">
-                <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">
-                    Jika Belum Memiliki Akun Silahkan Hubungi Administrator
-                </a>
+                <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Jika Belum Memiliki Akun Silahkan Hubungi Administrator</a>
             </div>
         </div>
     </div>

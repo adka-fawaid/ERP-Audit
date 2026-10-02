@@ -13,43 +13,7 @@ function hideLoading() {
 
     loadingOverlay.style.display = 'none';
 }
-const sidebarCollapseToggle = document.getElementById('sidebarCollapseToggle');
-const sidebarShowToggle = document.getElementById('sidebarShowToggle');
-const mainWrapper = document.getElementById('main-wrapper');
 
-if (sidebarShowToggle) {
-    sidebarShowToggle.style.display = 'none';
-}
-
-sidebarCollapseToggle?.addEventListener('click', () => {
-    if (!sidebar || !mainWrapper) return;
-
-    sidebar.style.transform = 'translateX(-100%)';
-    mainWrapper.style.marginLeft = '0';
-
-    if (sidebarCollapseToggle) {
-        sidebarCollapseToggle.style.display = 'none';
-    }
-
-    if (sidebarShowToggle) {
-        sidebarShowToggle.style.display = 'flex';
-    }
-});
-
-sidebarShowToggle?.addEventListener('click', () => {
-    if (!sidebar || !mainWrapper) return;
-
-    sidebar.style.transform = 'translateX(0)';
-    mainWrapper.style.marginLeft = '';
-
-    if (sidebarCollapseToggle) {
-        sidebarCollapseToggle.style.display = 'flex';
-    }
-
-    if (sidebarShowToggle) {
-        sidebarShowToggle.style.display = 'none';
-    }
-});
 function openLogoutModal() {
     const modal = document.getElementById('logoutModal');
 
@@ -77,13 +41,83 @@ function confirmLogout() {
 
     form.submit();
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarCollapseToggle = document.getElementById('sidebarCollapseToggle');
+    const sidebarShowToggle = document.getElementById('sidebarShowToggle');
+    const mainWrapper = document.getElementById('main-wrapper');
+    const headerTitle = document.getElementById('headerTitle');
+
     const profileMenuButton = document.getElementById('profileMenuButton');
     const profileMenu = document.getElementById('profileMenu');
     const profileMenuIcon = document.getElementById('profileMenuIcon');
+
     const serverDateTime = document.getElementById('serverDateTime');
+
+    function updateSidebarResponsive() {
+        if (!sidebar || !mainWrapper) return;
+
+        if (window.innerWidth < 1024) {
+            sidebar.style.transform = 'translateX(-100%)';
+            mainWrapper.style.marginLeft = '0';
+
+            if (sidebarCollapseToggle) {
+                sidebarCollapseToggle.style.display = 'none';
+            }
+
+            if (sidebarShowToggle) {
+                sidebarShowToggle.style.display = 'flex';
+            }
+
+            return;
+        }
+
+        sidebar.style.transform = 'translateX(0)';
+        mainWrapper.style.marginLeft = '16rem';
+
+        if (sidebarCollapseToggle) {
+            sidebarCollapseToggle.style.display = 'flex';
+        }
+
+        if (sidebarShowToggle) {
+            sidebarShowToggle.style.display = 'none';
+        }
+    }
+
+    updateSidebarResponsive();
+
+    window.addEventListener('resize', updateSidebarResponsive);
+
+    sidebarCollapseToggle?.addEventListener('click', () => {
+        if (!sidebar || !mainWrapper) return;
+
+        sidebar.style.transform = 'translateX(-100%)';
+        mainWrapper.style.marginLeft = '0';
+
+        if (sidebarCollapseToggle) {
+            sidebarCollapseToggle.style.display = 'none';
+        }
+
+        if (sidebarShowToggle) {
+            sidebarShowToggle.style.display = 'flex';
+        }
+    });
+
+    sidebarShowToggle?.addEventListener('click', () => {
+        if (!sidebar || !mainWrapper) return;
+
+        sidebar.style.transform = 'translateX(0)';
+        mainWrapper.style.marginLeft = '16rem';
+
+        if (sidebarCollapseToggle) {
+            sidebarCollapseToggle.style.display = 'flex';
+        }
+
+        if (sidebarShowToggle) {
+            sidebarShowToggle.style.display = 'none';
+        }
+    });
 
     if (serverDateTime) {
         let serverTime = Number(serverDateTime.dataset.serverTime) * 1000;
@@ -92,8 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const date = new Date(serverTime);
 
             const day = String(date.getDate()).padStart(2, '0');
-            const month = date.toLocaleDateString('id-ID', { month: 'long' });
+            const month = date.toLocaleDateString('id-ID', {
+                month: 'long'
+            });
             const year = date.getFullYear();
+
             const hours = String(date.getHours()).padStart(2, '0');
             const minutes = String(date.getMinutes()).padStart(2, '0');
             const seconds = String(date.getSeconds()).padStart(2, '0');
@@ -104,20 +141,26 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         updateServerTime();
+
         setInterval(updateServerTime, 1000);
     }
-
-    sidebarToggle?.addEventListener('click', () => {
-        sidebar?.classList.toggle('-translate-x-full');
-    });
 
     profileMenuButton?.addEventListener('click', () => {
         profileMenu?.classList.toggle('hidden');
         profileMenuIcon?.classList.toggle('rotate-180');
     });
 
-    document.querySelectorAll('form').forEach(form => {
-        form.addEventListener('submit', event => {
+    document.addEventListener('click', (event) => {
+        if (!profileMenuButton || !profileMenu) return;
+
+        if (!profileMenuButton.contains(event.target) && !profileMenu.contains(event.target)) {
+            profileMenu.classList.add('hidden');
+            profileMenuIcon?.classList.remove('rotate-180');
+        }
+    });
+
+    document.querySelectorAll('form').forEach((form) => {
+        form.addEventListener('submit', (event) => {
             if (form.dataset.loadingSubmitted === 'true') {
                 return;
             }
@@ -133,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300);
         });
     });
-    
 });
 
 window.showLoading = showLoading;

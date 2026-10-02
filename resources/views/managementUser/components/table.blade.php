@@ -81,39 +81,25 @@
 
                         <td class="px-6 py-4">
                             @if ($user->auth_type === 'company')
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
-                                    Internal
-                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">Internal</span>
                             @else
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700">
-                                    External
-                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700">External</span>
                             @endif
                         </td>
 
                         <td class="px-6 py-4">
                             @if ($user->role === 'admin')
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
-                                    Admin
-                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">Admin</span>
                             @else
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                    Viewer
-                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Viewer</span>
                             @endif
                         </td>
 
                         <td class="px-6 py-4">
                             @if ($user->is_active)
-                                <span class="inline-flex items-center gap-1.5 text-green-600 font-medium">
-                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                    Aktif
-                                </span>
+                                <span class="inline-flex items-center gap-1.5 text-green-600 font-medium"><span class="w-2 h-2 rounded-full bg-green-500"></span> Aktif</span>
                             @else
-                                <span class="inline-flex items-center gap-1.5 text-red-600 font-medium">
-                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
-                                    Nonaktif
-                                </span>
+                                <span class="inline-flex items-center gap-1.5 text-red-600 font-medium"><span class="w-2 h-2 rounded-full bg-red-500"></span> Nonaktif</span>
                             @endif
                         </td>
 
