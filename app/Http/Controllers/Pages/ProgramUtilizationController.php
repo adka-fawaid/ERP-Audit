@@ -23,17 +23,14 @@ class ProgramUtilizationController extends Controller
 
         $query = TrHist::query();
 
-        // Filter bulan
         if ($month !== 'all') {
             $query->whereMonth('trans_date', $month);
         }
 
-        // Filter tahun
         if ($year !== 'all') {
             $query->whereYear('trans_date', $year);
         }
 
-        // Statistik
         $allPrograms = (clone $query)
             ->select('program')
             ->selectRaw('COUNT(*) as total')
@@ -45,12 +42,9 @@ class ProgramUtilizationController extends Controller
         $rarePrograms = $allPrograms->whereBetween('total', [1, 49])->count();
         $totalTransactions = (clone $query)->count();
 
-        // Filter search untuk tabel
         if ($search !== '') {
             $query->where('program', 'like', '%' . $search . '%');
         }
-
-        // Ranking Program
         $programQuery = (clone $query)
             ->select('program')
             ->selectRaw('COUNT(*) as total')
@@ -59,16 +53,12 @@ class ProgramUtilizationController extends Controller
             ->selectRaw("SUM(CASE WHEN trans_type = 'ISS-WO' THEN 1 ELSE 0 END) as iss_wo")
             ->groupBy('program')
             ->orderByDesc('total');
-
         if ($status === 'active') {
             $programQuery->having('total', '>=', 50);
         }
-
         if ($status === 'rare') {
             $programQuery->havingBetween('total', [1, 49]);
         }
-
-        // Pagination
         $programs = $programQuery
             ->paginate(10)
             ->withQueryString();

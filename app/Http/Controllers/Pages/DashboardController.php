@@ -19,50 +19,39 @@ class DashboardController extends Controller
             ->distinct()
             ->orderByDesc('year')
             ->pluck('year');
-
         $query = TrHist::query();
-
         if ($month !== 'all') {
             $query->whereMonth('trans_date', $month);
         }
-
         if ($year !== 'all') {
             $query->whereYear('trans_date', $year);
         }
-
         $totalTransactions = (clone $query)->count();
-
         $totalActiveUsers = (clone $query)
             ->distinct('tr_user')
             ->count('tr_user');
-
         $totalPrograms = (clone $query)
             ->distinct('program')
             ->count('program');
-
         $sundayTransactions = (clone $query)
             ->whereRaw('DAYOFWEEK(trans_date) = 1')
             ->count();
-
         $dailyTransactions = (clone $query)
             ->selectRaw('trans_date, COUNT(*) as total')
             ->groupBy('trans_date')
             ->orderBy('trans_date')
             ->get();
-
         $topPrograms = (clone $query)
             ->selectRaw('program, COUNT(*) as total')
             ->groupBy('program')
             ->orderByDesc('total')
             ->limit(10)
             ->get();
-
         $transTypes = (clone $query)
             ->selectRaw('trans_type, COUNT(*) as total')
             ->groupBy('trans_type')
             ->orderByDesc('total')
             ->get();
-
         return view('dashboard.index', compact(
             'month',
             'year',

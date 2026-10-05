@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\TrHist;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MatrixController extends Controller
