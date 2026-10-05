@@ -42,6 +42,83 @@ function confirmLogout() {
     form.submit();
 }
 
+function restoreSearchFocusAfterReload() {
+    const selector = [
+        'input[type="search"]',
+        'input[name="search"]',
+        '#programSearch',
+        '#userSearch',
+        '#anomalySearch'
+    ].join(', ');
+
+    const key = `qad-search:${window.location.pathname}`;
+    const saved = sessionStorage.getItem(key);
+
+    if (!saved) return;
+
+    try {
+        const parsed = JSON.parse(saved);
+        const target = parsed.id ? document.getElementById(parsed.id) : document.querySelector(`input[name="${parsed.name}"]`);
+
+        if (!target) return;
+
+        const value = typeof parsed.value === 'string' ? parsed.value : target.value;
+        target.value = value;
+        target.focus();
+
+        const end = value.length;
+        if (typeof target.setSelectionRange === 'function') {
+            target.setSelectionRange(end, end);
+        }
+
+        sessionStorage.removeItem(key);
+    } catch (error) {
+        sessionStorage.removeItem(key);
+    }
+}
+
+function rememberSearchState() {
+    const selector = [
+        'input[type="search"]',
+        'input[name="search"]',
+        '#programSearch',
+        '#userSearch',
+        '#anomalySearch'
+    ].join(', ');
+
+    document.querySelectorAll(selector).forEach((input) => {
+        input.addEventListener('focus', () => {
+            sessionStorage.setItem(`qad-search:${window.location.pathname}`, JSON.stringify({
+                id: input.id || '',
+                name: input.name || '',
+                value: input.value || ''
+            }));
+        });
+
+        input.addEventListener('input', () => {
+            sessionStorage.setItem(`qad-search:${window.location.pathname}`, JSON.stringify({
+                id: input.id || '',
+                name: input.name || '',
+                value: input.value || ''
+            }));
+        });
+    });
+
+    window.addEventListener('beforeunload', () => {
+        const active = document.activeElement && document.activeElement.matches(selector)
+            ? document.activeElement
+            : null;
+
+        if (active) {
+            sessionStorage.setItem(`qad-search:${window.location.pathname}`, JSON.stringify({
+                id: active.id || '',
+                name: active.name || '',
+                value: active.value || ''
+            }));
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
     const sidebarCollapseToggle = document.getElementById('sidebarCollapseToggle');
@@ -54,6 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileMenuIcon = document.getElementById('profileMenuIcon');
 
     const serverDateTime = document.getElementById('serverDateTime');
+
+    rememberSearchState();
+    restoreSearchFocusAfterReload();
 
     function updateSidebarResponsive() {
         if (!sidebar || !mainWrapper) return;

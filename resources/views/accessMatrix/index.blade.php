@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('title', 'Matriks Akses')
-
 @section('content')
 <div id="matrixPage" class="space-y-6">
     <div class="flex items-end justify-between gap-4">
@@ -9,22 +7,28 @@
             <h1 class="text-2xl font-bold text-gray-900">Matriks Akses</h1>
             <p class="mt-1 text-sm text-gray-500">Monitoring hubungan akses user terhadap program ERP QAD.</p>
         </div>
-        <div class="flex gap-2">
-            <select id="monthFilter" class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-blue-500 focus:ring-blue-500">
-                <option value="all" {{ $month == 'all' ? 'selected' : '' }}>Semua Bulan</option>
-                @foreach(range(1, 12) as $m)
-                    <option value="{{ $m }}" {{ (string) $month == (string) $m ? 'selected' : '' }}>{{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}</option>
-                @endforeach
-            </select>
-            <select id="yearFilter" class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-blue-500 focus:ring-blue-500">
-                <option value="all" {{ $year == 'all' ? 'selected' : '' }}>Semua Tahun</option>
-                @foreach($years as $y)
-                    <option value="{{ $y }}" {{ (string) $year == (string) $y ? 'selected' : '' }}>{{ $y }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
+            <div class="flex gap-3">
+                <select id="monthFilter"
+                        class="h-10 min-w-[160px] rounded-lg border border-gray-200 bg-gray-100 px-3 text-sm text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+                    <option value="all" {{ $month == 'all' ? 'selected' : '' }}>Semua Bulan</option>
+                    @foreach(range(1, 12) as $m)
+                        <option value="{{ $m }}" {{ (string) $month === (string) $m ? 'selected' : '' }}>
+                            {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+                        </option>
+                    @endforeach
+                </select>
+                <select id="yearFilter"
+                        class="h-10 min-w-[140px] rounded-lg border border-gray-200 bg-gray-100 px-3 text-sm text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+                    <option value="all" {{ $year == 'all' ? 'selected' : '' }}>Semua Tahun</option>
+                    @foreach($years as $y)
+                        <option value="{{ $y }}" {{ (string) $year === (string) $y ? 'selected' : '' }}>
+                            {{ $y }}
+                        </option>
+                    @endforeach
+                </select>
 
+</div>
+    </div>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
             <div class="flex items-center justify-between">
@@ -60,7 +64,6 @@
             </div>
         </div>
     </div>
-
     <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
         <div class="border-b border-gray-100 px-6 py-5">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -68,7 +71,7 @@
                     <h2 class="font-semibold text-gray-900">Matriks User × Program</h2>
                     <p class="mt-1 text-xs text-gray-400">Jumlah transaksi berdasarkan user dan program.</p>
                 </div>
-                <button type="button" class="flex h-9 items-center gap-2 rounded-lg border border-gray-200 px-3 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                <button type="button" data-export-url="{{ route('accessMatrix.export') }}" data-export-report="Matriks Akses" class="flex h-9 items-center gap-2 rounded-lg border border-gray-200 px-3 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
                     <i class="fa-solid fa-file-excel text-green-600"></i>
                     Export Excel
                 </button>
@@ -84,7 +87,6 @@
                 </div>
             </div>
         </div>
-
         <div class="overflow-x-auto">
             <table class="w-full min-w-max text-sm">
                 <thead class="border-b border-gray-100 bg-gray-50">
@@ -136,7 +138,6 @@
     </div>
 </div>
 @endsection
-
 @push('scripts')
 <script>
     window.matrixData = {

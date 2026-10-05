@@ -34789,6 +34789,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/matrix */ "./resources/js/pages/matrix.js");
 /* harmony import */ var _pages_program_utilization__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/program-utilization */ "./resources/js/pages/program-utilization.js");
 /* harmony import */ var _pages_program_utilization__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_pages_program_utilization__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _pages_activity_log__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/activity-log */ "./resources/js/pages/activity-log.js");
+/* harmony import */ var _pages_activity_log__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_pages_activity_log__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _pages_export_modal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/export-modal */ "./resources/js/pages/export-modal.js");
+/* harmony import */ var _pages_export_modal__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_pages_export_modal__WEBPACK_IMPORTED_MODULE_9__);
+
+
 
 
 
@@ -34966,8 +34972,6 @@ var donutValueLabelPlugin = {
           return;
         }
         var percentage = (value / total * 100).toFixed(1);
-
-        // Posisi tengah masing-masing slice
         var angle = element.startAngle + (element.endAngle - element.startAngle) / 2;
         var radius = (element.outerRadius + element.innerRadius) / 2;
         var x = element.x + Math.cos(angle) * radius;
@@ -35002,11 +35006,7 @@ function createDonutChart(canvas, transTypes) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      // Bikin donut menggunakan area chart
-      // semaksimal mungkin.
       radius: '92%',
-      // Lubang sedikit lebih kecil
-      // supaya donut terlihat lebih besar/tebal.
       cutout: '48%',
       layout: {
         padding: {
@@ -35030,8 +35030,6 @@ function createDonutChart(canvas, transTypes) {
             }
           }
         },
-        // Tidak ada tooltip wajib.
-        // Data sudah tampil langsung di donut.
         tooltip: {
           enabled: true
         }
@@ -35105,8 +35103,6 @@ function createLineChart(canvas, transactions) {
         legend: {
           display: false
         },
-        // Tidak ada label angka.
-        // Nilai hanya muncul ketika hover.
         tooltip: {
           enabled: true,
           callbacks: {
@@ -35143,6 +35139,163 @@ function createLineChart(canvas, transactions) {
     }
   });
 }
+
+/***/ }),
+
+/***/ "./resources/js/pages/activity-log.js":
+/*!********************************************!*\
+  !*** ./resources/js/pages/activity-log.js ***!
+  \********************************************/
+/***/ (() => {
+
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+window.showActivityDetail = function (id, activity, user, userName, role, time, ip, browser, description) {
+  document.getElementById('detailActivity').textContent = activity || '-';
+  document.getElementById('detailUser').textContent = userName || user || '-';
+  document.getElementById('detailRole').textContent = role || '-';
+  document.getElementById('detailTime').textContent = time || '-';
+  document.getElementById('detailIp').textContent = ip || '-';
+  document.getElementById('detailBrowser').textContent = browser || '-';
+  document.getElementById('detailDescription').textContent = description || '-';
+  var modal = document.getElementById('activityDetailModal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  document.body.classList.add('overflow-hidden');
+};
+window.closeActivityDetail = function () {
+  var modal = document.getElementById('activityDetailModal');
+  if (!modal) return;
+  modal.classList.remove('flex');
+  modal.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+};
+document.addEventListener('DOMContentLoaded', function () {
+  var _form$querySelector;
+  var modal = document.getElementById('activityDetailModal');
+  var form = document.getElementById('activityLogFilters');
+  var rows = document.getElementById('activityLogRows');
+  var pagination = document.getElementById('activityLogPagination');
+  var reset = document.getElementById('activityLogReset');
+  var requestController;
+  var searchTimer;
+  var currentParams = new URLSearchParams(window.location.search);
+  if (!form || !rows || !pagination) return;
+  function refreshLogs() {
+    return _refreshLogs.apply(this, arguments);
+  }
+  function _refreshLogs() {
+    _refreshLogs = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var _requestController;
+      var params,
+        updateUrl,
+        url,
+        _data$firstItem,
+        _data$lastItem,
+        response,
+        data,
+        hasFilters,
+        _args = arguments,
+        _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            params = _args.length > 0 && _args[0] !== undefined ? _args[0] : currentParams;
+            updateUrl = _args.length > 1 && _args[1] !== undefined ? _args[1] : false;
+            (_requestController = requestController) === null || _requestController === void 0 || _requestController.abort();
+            requestController = new AbortController();
+            url = new URL(form.action, window.location.href);
+            url.search = params.toString();
+            _context.p = 1;
+            _context.n = 2;
+            return fetch(url, {
+              headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              signal: requestController.signal
+            });
+          case 2:
+            response = _context.v;
+            if (response.ok) {
+              _context.n = 3;
+              break;
+            }
+            throw new Error("HTTP ".concat(response.status));
+          case 3:
+            _context.n = 4;
+            return response.json();
+          case 4:
+            data = _context.v;
+            rows.innerHTML = data.rows;
+            pagination.innerHTML = data.pagination;
+            document.getElementById('activityLogTotal').textContent = "".concat(new Intl.NumberFormat().format(data.total), " Aktivitas");
+            document.getElementById('activityLogRange').textContent = "Menampilkan ".concat((_data$firstItem = data.firstItem) !== null && _data$firstItem !== void 0 ? _data$firstItem : 0, "-").concat((_data$lastItem = data.lastItem) !== null && _data$lastItem !== void 0 ? _data$lastItem : 0, " dari ").concat(data.total, " aktivitas");
+            currentParams = new URLSearchParams(params);
+            hasFilters = ['search', 'activity', 'user', 'start_date', 'end_date'].some(function (name) {
+              return currentParams.get(name);
+            });
+            reset.classList.toggle('hidden', !hasFilters);
+            if (updateUrl) {
+              window.history.replaceState({}, '', "".concat(url.pathname).concat(url.search));
+            }
+            _context.n = 6;
+            break;
+          case 5:
+            _context.p = 5;
+            _t = _context.v;
+            if (_t.name !== 'AbortError') console.error('Gagal memperbarui log aktivitas:', _t);
+          case 6:
+            return _context.a(2);
+        }
+      }, _callee, null, [[1, 5]]);
+    }));
+    return _refreshLogs.apply(this, arguments);
+  }
+  function applyFilters() {
+    var params = new URLSearchParams(new FormData(form));
+    params["delete"]('page');
+    refreshLogs(params, true);
+  }
+  form === null || form === void 0 || form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    applyFilters();
+  });
+  form === null || form === void 0 || form.querySelectorAll('select, input[type="date"]').forEach(function (input) {
+    input.addEventListener('change', applyFilters);
+  });
+  form === null || form === void 0 || (_form$querySelector = form.querySelector('input[name="search"]')) === null || _form$querySelector === void 0 || _form$querySelector.addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(applyFilters, 300);
+  });
+  reset === null || reset === void 0 || reset.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    form.reset();
+    applyFilters();
+  });
+  pagination === null || pagination === void 0 || pagination.addEventListener('click', function (event) {
+    var link = event.target.closest('a');
+    if (!link) return;
+    event.preventDefault();
+    refreshLogs(new URL(link.href).searchParams, true);
+  });
+  window.setInterval(function () {
+    if (!document.hidden) refreshLogs();
+  }, 15000);
+  modal === null || modal === void 0 || modal.addEventListener('click', function (event) {
+    if (event.target === modal) {
+      window.closeActivityDetail();
+    }
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+      window.closeActivityDetail();
+    }
+  });
+});
 
 /***/ }),
 
@@ -35239,6 +35392,158 @@ window.initDashboardCharts = function () {
 
 /***/ }),
 
+/***/ "./resources/js/pages/export-modal.js":
+/*!********************************************!*\
+  !*** ./resources/js/pages/export-modal.js ***!
+  \********************************************/
+/***/ (() => {
+
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+document.addEventListener('DOMContentLoaded', function () {
+  var modal = document.getElementById('exportModal');
+  var form = document.getElementById('exportForm');
+  if (!modal || !form) return;
+  var reason = document.getElementById('exportReason');
+  var otherField = document.getElementById('exportReasonOtherField');
+  var otherReason = document.getElementById('exportReasonOther');
+  var error = document.getElementById('exportError');
+  var submit = document.getElementById('exportSubmit');
+  function closeModal() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+  document.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-export-url]');
+    if (button) {
+      event.preventDefault();
+      form.reset();
+      form.action = button.dataset.exportUrl;
+      document.getElementById('exportReportName').textContent = button.dataset.exportReport;
+      otherField.classList.add('hidden');
+      otherReason.required = false;
+      otherReason.value = '';
+      form.querySelectorAll('[data-export-context]').forEach(function (input) {
+        return input.remove();
+      });
+      var allowedFilters = ['search', 'status', 'user', 'program', 'activity'];
+      new URLSearchParams(window.location.search).forEach(function (value, name) {
+        if (!allowedFilters.includes(name) || !value) return;
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        input.dataset.exportContext = 'true';
+        form.appendChild(input);
+      });
+      error.classList.add('hidden');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      return;
+    }
+    if (event.target.closest('[data-export-close]')) {
+      closeModal();
+    }
+  });
+  reason.addEventListener('change', function () {
+    var showOther = reason.value === 'other';
+    otherField.classList.toggle('hidden', !showOther);
+    otherReason.required = showOther;
+  });
+  form.addEventListener('submit', /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(event) {
+      var fromDate, toDate, _response$headers$get, response, result, blob, filename, downloadUrl, link, _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            event.preventDefault();
+            event.stopPropagation();
+            error.classList.add('hidden');
+            if (form.reportValidity()) {
+              _context.n = 1;
+              break;
+            }
+            return _context.a(2);
+          case 1:
+            fromDate = document.getElementById('exportFromDate').value;
+            toDate = document.getElementById('exportToDate').value;
+            if (!(toDate < fromDate)) {
+              _context.n = 2;
+              break;
+            }
+            error.textContent = 'Tanggal sampai tidak boleh lebih kecil dari tanggal mulai.';
+            error.classList.remove('hidden');
+            return _context.a(2);
+          case 2:
+            submit.disabled = true;
+            submit.textContent = 'Menyiapkan Excel...';
+            _context.p = 3;
+            _context.n = 4;
+            return fetch(form.action, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              body: new FormData(form)
+            });
+          case 4:
+            response = _context.v;
+            if (response.ok) {
+              _context.n = 6;
+              break;
+            }
+            _context.n = 5;
+            return response.json();
+          case 5:
+            result = _context.v;
+            throw new Error(Object.values(result.errors || {}).flat()[0] || result.message || 'Export gagal.');
+          case 6:
+            _context.n = 7;
+            return response.blob();
+          case 7:
+            blob = _context.v;
+            filename = ((_response$headers$get = response.headers.get('Content-Disposition')) === null || _response$headers$get === void 0 || (_response$headers$get = _response$headers$get.match(/filename="?([^";]+)"?/)) === null || _response$headers$get === void 0 ? void 0 : _response$headers$get[1]) || 'qad-report.xlsx';
+            downloadUrl = URL.createObjectURL(blob);
+            link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(downloadUrl);
+            closeModal();
+            _context.n = 9;
+            break;
+          case 8:
+            _context.p = 8;
+            _t = _context.v;
+            error.textContent = _t.message;
+            error.classList.remove('hidden');
+          case 9:
+            _context.p = 9;
+            submit.disabled = false;
+            submit.textContent = 'Download Excel';
+            return _context.f(9);
+          case 10:
+            return _context.a(2);
+        }
+      }, _callee, null, [[3, 8, 9, 10]]);
+    }));
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }());
+  modal.addEventListener('click', function (event) {
+    if (event.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeModal();
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/pages/layout.js":
 /*!**************************************!*\
   !*** ./resources/js/pages/layout.js ***!
@@ -35274,6 +35579,56 @@ function confirmLogout() {
   if (!form) return;
   form.submit();
 }
+function restoreSearchFocusAfterReload() {
+  var selector = ['input[type="search"]', 'input[name="search"]', '#programSearch', '#userSearch', '#anomalySearch'].join(', ');
+  var key = "qad-search:".concat(window.location.pathname);
+  var saved = sessionStorage.getItem(key);
+  if (!saved) return;
+  try {
+    var parsed = JSON.parse(saved);
+    var target = parsed.id ? document.getElementById(parsed.id) : document.querySelector("input[name=\"".concat(parsed.name, "\"]"));
+    if (!target) return;
+    var value = typeof parsed.value === 'string' ? parsed.value : target.value;
+    target.value = value;
+    target.focus();
+    var end = value.length;
+    if (typeof target.setSelectionRange === 'function') {
+      target.setSelectionRange(end, end);
+    }
+    sessionStorage.removeItem(key);
+  } catch (error) {
+    sessionStorage.removeItem(key);
+  }
+}
+function rememberSearchState() {
+  var selector = ['input[type="search"]', 'input[name="search"]', '#programSearch', '#userSearch', '#anomalySearch'].join(', ');
+  document.querySelectorAll(selector).forEach(function (input) {
+    input.addEventListener('focus', function () {
+      sessionStorage.setItem("qad-search:".concat(window.location.pathname), JSON.stringify({
+        id: input.id || '',
+        name: input.name || '',
+        value: input.value || ''
+      }));
+    });
+    input.addEventListener('input', function () {
+      sessionStorage.setItem("qad-search:".concat(window.location.pathname), JSON.stringify({
+        id: input.id || '',
+        name: input.name || '',
+        value: input.value || ''
+      }));
+    });
+  });
+  window.addEventListener('beforeunload', function () {
+    var active = document.activeElement && document.activeElement.matches(selector) ? document.activeElement : null;
+    if (active) {
+      sessionStorage.setItem("qad-search:".concat(window.location.pathname), JSON.stringify({
+        id: active.id || '',
+        name: active.name || '',
+        value: active.value || ''
+      }));
+    }
+  });
+}
 document.addEventListener('DOMContentLoaded', function () {
   var sidebar = document.getElementById('sidebar');
   var sidebarCollapseToggle = document.getElementById('sidebarCollapseToggle');
@@ -35284,6 +35639,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var profileMenu = document.getElementById('profileMenu');
   var profileMenuIcon = document.getElementById('profileMenuIcon');
   var serverDateTime = document.getElementById('serverDateTime');
+  rememberSearchState();
+  restoreSearchFocusAfterReload();
   function updateSidebarResponsive() {
     if (!sidebar || !mainWrapper) return;
     if (window.innerWidth < 1024) {
@@ -35449,8 +35806,29 @@ window.initMatrixCharts = function () {
     console.warn('matrixData tidak ditemukan');
     return;
   }
+  var monthFilter = document.getElementById('monthFilter');
+  var yearFilter = document.getElementById('yearFilter');
+  var userSearch = document.getElementById('userSearch');
+  var programSearch = document.getElementById('programSearch');
+  function applyFilters() {
+    var params = new URLSearchParams(window.location.search);
+    params.set('month', monthFilter.value);
+    params.set('year', yearFilter.value);
+    if (userSearch.value.trim()) params.set('user', userSearch.value.trim());else params["delete"]('user');
+    if (programSearch.value.trim()) params.set('program', programSearch.value.trim());else params["delete"]('program');
+    window.location.href = "".concat(window.location.pathname, "?").concat(params.toString());
+  }
+  monthFilter === null || monthFilter === void 0 || monthFilter.addEventListener('change', applyFilters);
+  yearFilter === null || yearFilter === void 0 || yearFilter.addEventListener('change', applyFilters);
+  var searchTimer;
+  [userSearch, programSearch].forEach(function (input) {
+    return input === null || input === void 0 ? void 0 : input.addEventListener('input', function () {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(applyFilters, 400);
+    });
+  });
   var topUsersCanvas = document.getElementById('topUsersChart');
-  if (topUsersCanvas) {
+  if (topUsersCanvas && Array.isArray(data.topUsers) && data.topUsers.length) {
     (0,_charts_bar__WEBPACK_IMPORTED_MODULE_0__.createBarChart)(topUsersCanvas, data.topUsers, 'user');
   }
 };
@@ -35526,33 +35904,16 @@ function closeModal() {
   modal.classList.add('hidden');
   document.body.classList.remove('overflow-hidden');
 }
-function toggleUserType() {
-  var _document$getElementB;
-  var type = (_document$getElementB = document.getElementById('auth_type')) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.value;
-  var companyFields = document.getElementById('companyFields');
-  var externalFields = document.getElementById('externalFields');
-  if (!companyFields || !externalFields) return;
-  if (type === 'company') {
-    companyFields.classList.remove('hidden');
-    externalFields.classList.add('hidden');
-  } else {
-    companyFields.classList.add('hidden');
-    externalFields.classList.remove('hidden');
-  }
-}
 function showUser(_x) {
   return _showUser.apply(this, arguments);
 }
 function _showUser() {
   _showUser = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(id) {
-    var response, user, viewNik, viewName, viewEmail, viewAuthType, viewRole, viewStatus, viewCreatedAt, viewAvatar, modal, _t;
+    var response, user, modal, _t;
     return _regenerator().w(function (_context) {
       while (1) switch (_context.p = _context.n) {
         case 0:
           _context.p = 0;
-          if (typeof showLoading === 'function') {
-            showLoading();
-          }
           _context.n = 1;
           return fetch("managementUser/".concat(id), {
             headers: {
@@ -35572,65 +35933,27 @@ function _showUser() {
           return response.json();
         case 3:
           user = _context.v;
-          viewNik = document.getElementById('viewNik');
-          viewName = document.getElementById('viewName');
-          viewEmail = document.getElementById('viewEmail');
-          viewAuthType = document.getElementById('viewAuthType');
-          viewRole = document.getElementById('viewRole');
-          viewStatus = document.getElementById('viewStatus');
-          viewCreatedAt = document.getElementById('viewCreatedAt');
-          viewAvatar = document.getElementById('viewAvatar');
-          if (viewNik) {
-            viewNik.textContent = user.nik || '-';
-          }
-          if (viewName) {
-            viewName.textContent = user.name || '-';
-          }
-          if (viewEmail) {
-            viewEmail.textContent = user.email || '-';
-          }
-          if (viewAuthType) {
-            viewAuthType.textContent = user.auth_type === 'company' ? 'Internal' : 'External';
-          }
-          if (viewRole) {
-            viewRole.textContent = user.role === 'admin' ? 'Admin' : 'Viewer';
-          }
-          if (viewStatus) {
-            viewStatus.textContent = user.is_active ? 'Aktif' : 'Nonaktif';
-          }
-          if (viewCreatedAt) {
-            viewCreatedAt.textContent = user.created_at || '-';
-          }
-          if (viewAvatar) {
-            viewAvatar.textContent = user.name ? user.name.charAt(0).toUpperCase() : '-';
-          }
+          document.getElementById('viewNik').textContent = user.nik || '-';
+          document.getElementById('viewNikDetail').textContent = user.nik || '-';
+          document.getElementById('viewName').textContent = user.name || '-';
+          document.getElementById('viewRole').textContent = user.role === 'admin' ? 'Admin' : 'Viewer';
+          document.getElementById('viewStatus').textContent = user.status === 'active' ? 'Aktif' : 'Nonaktif';
+          document.getElementById('viewAvatar').textContent = user.name ? user.name.charAt(0).toUpperCase() : '-';
           modal = document.getElementById('viewUserModal');
-          if (modal) {
-            _context.n = 4;
-            break;
-          }
-          return _context.a(2);
-        case 4:
           modal.classList.remove('hidden');
           modal.classList.add('flex');
           document.body.classList.add('overflow-hidden');
-          _context.n = 6;
+          _context.n = 5;
           break;
-        case 5:
-          _context.p = 5;
+        case 4:
+          _context.p = 4;
           _t = _context.v;
-          console.error('View user error:', _t);
+          console.error(_t);
           alert('Gagal mengambil data user.');
-        case 6:
-          _context.p = 6;
-          if (typeof hideLoading === 'function') {
-            hideLoading();
-          }
-          return _context.f(6);
-        case 7:
+        case 5:
           return _context.a(2);
       }
-    }, _callee, null, [[0, 5, 6, 7]]);
+    }, _callee, null, [[0, 4]]);
   }));
   return _showUser.apply(this, arguments);
 }
@@ -35646,14 +35969,11 @@ function editUser(_x2) {
 }
 function _editUser() {
   _editUser = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(id) {
-    var response, user, form, editNik, editName, editEmail, editPassword, editRole, editRoleDisplay, editRoleHidden, editStatus, companyFields, externalFields, modal, _t2;
+    var response, user, modal, _t2;
     return _regenerator().w(function (_context2) {
       while (1) switch (_context2.p = _context2.n) {
         case 0:
           _context2.p = 0;
-          if (typeof showLoading === 'function') {
-            showLoading();
-          }
           _context2.n = 1;
           return fetch("managementUser/".concat(id), {
             headers: {
@@ -35673,89 +35993,26 @@ function _editUser() {
           return response.json();
         case 3:
           user = _context2.v;
-          form = document.getElementById('editUserForm');
-          editNik = document.getElementById('editNik');
-          editName = document.getElementById('editName');
-          editEmail = document.getElementById('editEmail');
-          editPassword = document.getElementById('editPassword');
-          editRole = document.getElementById('editRole');
-          editRoleDisplay = document.getElementById('editRoleDisplay');
-          editRoleHidden = document.getElementById('editRoleHidden');
-          editStatus = document.getElementById('editStatus');
-          companyFields = document.getElementById('editCompanyFields');
-          externalFields = document.getElementById('editExternalFields');
-          if (form) {
-            form.action = "managementUser/".concat(id);
-          }
-          if (editNik) {
-            editNik.value = user.nik || '';
-          }
-          if (editName) {
-            editName.value = user.name || '';
-          }
-          if (editEmail) {
-            editEmail.value = user.email || '';
-          }
-          if (editPassword) {
-            editPassword.value = '';
-          }
-          if (editStatus) {
-            editStatus.value = user.is_active ? '1' : '0';
-          }
-          if (user.auth_type === 'company') {
-            companyFields === null || companyFields === void 0 || companyFields.classList.remove('hidden');
-            externalFields === null || externalFields === void 0 || externalFields.classList.add('hidden');
-            if (editRole) {
-              editRole.classList.remove('hidden');
-              editRole.value = user.role;
-            }
-            if (editRoleDisplay) {
-              editRoleDisplay.classList.add('hidden');
-            }
-            if (editRoleHidden) {
-              editRoleHidden.value = user.role;
-            }
-          } else {
-            companyFields === null || companyFields === void 0 || companyFields.classList.add('hidden');
-            externalFields === null || externalFields === void 0 || externalFields.classList.remove('hidden');
-            if (editRole) {
-              editRole.classList.add('hidden');
-            }
-            if (editRoleDisplay) {
-              editRoleDisplay.classList.remove('hidden');
-              editRoleDisplay.textContent = 'Viewer';
-            }
-            if (editRoleHidden) {
-              editRoleHidden.value = 'viewer';
-            }
-          }
+          document.getElementById('editUserForm').action = "managementUser/".concat(id);
+          document.getElementById('editNik').value = user.nik || '';
+          document.getElementById('editName').value = user.name || '';
+          document.getElementById('editRole').value = user.role || 'viewer';
+          document.getElementById('editStatus').value = user.status || 'active';
           modal = document.getElementById('editUserModal');
-          if (modal) {
-            _context2.n = 4;
-            break;
-          }
-          return _context2.a(2);
-        case 4:
           modal.classList.remove('hidden');
           modal.classList.add('flex');
           document.body.classList.add('overflow-hidden');
-          _context2.n = 6;
+          _context2.n = 5;
           break;
-        case 5:
-          _context2.p = 5;
+        case 4:
+          _context2.p = 4;
           _t2 = _context2.v;
-          console.error('Edit user error:', _t2);
+          console.error(_t2);
           alert('Gagal mengambil data user.');
-        case 6:
-          _context2.p = 6;
-          if (typeof hideLoading === 'function') {
-            hideLoading();
-          }
-          return _context2.f(6);
-        case 7:
+        case 5:
           return _context2.a(2);
       }
-    }, _callee2, null, [[0, 5, 6, 7]]);
+    }, _callee2, null, [[0, 4]]);
   }));
   return _editUser.apply(this, arguments);
 }
@@ -35784,42 +36041,21 @@ function closeDeleteModal() {
   modal.classList.add('hidden');
   document.body.classList.remove('overflow-hidden');
 }
-function closeAlert(id) {
-  var alert = document.getElementById(id);
-  if (!alert) return;
-  alert.remove();
-}
 document.addEventListener('DOMContentLoaded', function () {
-  var addUserModal = document.getElementById('addUserModal');
-  var viewUserModal = document.getElementById('viewUserModal');
-  var editUserModal = document.getElementById('editUserModal');
-  var deleteUserModal = document.getElementById('deleteUserModal');
-  var editRole = document.getElementById('editRole');
-  var editRoleHidden = document.getElementById('editRoleHidden');
-  addUserModal === null || addUserModal === void 0 || addUserModal.addEventListener('click', function (event) {
-    if (event.target === addUserModal) {
-      closeModal();
-    }
+  var searchInput = document.querySelector('input[name="search"]');
+  var searchForm = searchInput === null || searchInput === void 0 ? void 0 : searchInput.closest('form');
+  var searchTimer;
+  searchInput === null || searchInput === void 0 || searchInput.addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function () {
+      searchForm === null || searchForm === void 0 || searchForm.submit();
+    }, 400);
   });
-  viewUserModal === null || viewUserModal === void 0 || viewUserModal.addEventListener('click', function (event) {
-    if (event.target === viewUserModal) {
-      closeViewModal();
-    }
-  });
-  editUserModal === null || editUserModal === void 0 || editUserModal.addEventListener('click', function (event) {
-    if (event.target === editUserModal) {
-      closeEditModal();
-    }
-  });
-  deleteUserModal === null || deleteUserModal === void 0 || deleteUserModal.addEventListener('click', function (event) {
-    if (event.target === deleteUserModal) {
-      closeDeleteModal();
-    }
-  });
-  editRole === null || editRole === void 0 || editRole.addEventListener('change', function () {
-    if (editRoleHidden) {
-      editRoleHidden.value = editRole.value;
-    }
+  var filters = document.querySelectorAll('select[name="role"], select[name="status"]');
+  filters.forEach(function (filter) {
+    filter.addEventListener('change', function () {
+      searchForm === null || searchForm === void 0 || searchForm.submit();
+    });
   });
   document.addEventListener('keydown', function (event) {
     if (event.key !== 'Escape') return;
@@ -35828,47 +36064,33 @@ document.addEventListener('DOMContentLoaded', function () {
     closeEditModal();
     closeDeleteModal();
   });
-  var filterForm = document.getElementById('userFilterForm');
-  var searchInput = document.getElementById('userSearch');
-  if (filterForm) {
-    var filterSelects = filterForm.querySelectorAll('select');
-    filterSelects.forEach(function (select) {
-      select.addEventListener('change', function () {
-        if (typeof showLoading === 'function') {
-          showLoading();
-        }
-        filterForm.submit();
-      });
-    });
-    if (searchInput) {
-      var searchTimeout;
-      searchInput.addEventListener('input', function () {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(function () {
-          if (typeof showLoading === 'function') {
-            showLoading();
-          }
-          filterForm.submit();
-        }, 500);
-      });
-    }
-  }
   var successAlert = document.getElementById('successAlert');
   var errorAlert = document.getElementById('errorAlert');
+  var validationAlert = document.getElementById('validationAlert');
   if (successAlert) {
     setTimeout(function () {
-      successAlert.remove();
-    }, 5000);
+      return successAlert.remove();
+    }, 4000);
   }
   if (errorAlert) {
     setTimeout(function () {
-      errorAlert.remove();
-    }, 7000);
+      return errorAlert.remove();
+    }, 5000);
+  }
+  if (validationAlert) {
+    setTimeout(function () {
+      return validationAlert.remove();
+    }, 5000);
   }
 });
+function closeAlert(id) {
+  var alert = document.getElementById(id);
+  if (alert) {
+    alert.remove();
+  }
+}
 window.openModal = openModal;
 window.closeModal = closeModal;
-window.toggleUserType = toggleUserType;
 window.showUser = showUser;
 window.closeViewModal = closeViewModal;
 window.editUser = editUser;

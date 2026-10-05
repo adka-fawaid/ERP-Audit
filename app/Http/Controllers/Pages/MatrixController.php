@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\TrHist;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MatrixController extends Controller
@@ -14,6 +15,7 @@ class MatrixController extends Controller
         $year = $request->input('year', now()->year);
         $userSearch = trim($request->input('user', ''));
         $programSearch = trim($request->input('program', ''));
+
         $years = TrHist::query()
             ->whereNotNull('trans_date')
             ->selectRaw('YEAR(trans_date) as year')
@@ -32,15 +34,15 @@ class MatrixController extends Controller
         }
 
         $totalUsers = (clone $query)
-            ->distinct('user')
-            ->count('user');
+            ->distinct('tr_user')
+            ->count('tr_user');
 
         $totalPrograms = (clone $query)
             ->distinct('program')
             ->count('program');
 
         $totalAccess = (clone $query)
-            ->selectRaw('COUNT(DISTINCT user, program) as total')
+            ->selectRaw('COUNT(DISTINCT tr_user, program) as total')
             ->value('total');
 
         $focusProgram = null;
@@ -58,12 +60,12 @@ class MatrixController extends Controller
         if ($focusProgram) {
             $focusUsers = (clone $query)
                 ->where('program', $focusProgram->program)
-                ->select('user')
+                ->select('tr_user')
                 ->distinct()
-                ->pluck('user');
+                ->pluck('tr_user');
 
             $programs = (clone $query)
-                ->whereIn('user', $focusUsers)
+                ->whereIn('tr_user', $focusUsers)
                 ->where('program', '!=', $focusProgram->program)
                 ->select('program')
                 ->selectRaw('COUNT(*) as total')
@@ -86,37 +88,37 @@ class MatrixController extends Controller
         $usersQuery = clone $query;
 
         if ($userSearch !== '') {
-            $usersQuery->where('user', 'like', "%{$userSearch}%");
+            $usersQuery->where('tr_user', 'like', "%{$userSearch}%");
         }
 
         if ($focusProgram) {
-            $usersQuery->whereIn('user', $focusUsers);
+            $usersQuery->whereIn('tr_user', $focusUsers);
         }
 
         $users = $usersQuery
-            ->select('user')
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('user')
-            ->orderByDesc('total')
-            ->get();
+                ->selectRaw('tr_user as user')
+                ->selectRaw('COUNT(*) as total')
+                ->groupBy('tr_user')
+                ->orderByDesc('total')
+                ->get();
 
         $matrix = (clone $query)
-            ->whereIn('user', $users->pluck('user'))
+            ->whereIn('tr_user', $users->pluck('user'))
             ->whereIn('program', $programs)
-            ->select('user', 'program')
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('user', 'program')
+            ->select('tr_user', 'program')
+            ->selectRaw('COUNT(*) as total')    
+            ->groupBy('tr_user', 'program')
             ->get()
-            ->groupBy('user');
+            ->groupBy('tr_user');
 
         $maxMatrixValue = $matrix
             ->flatten()
             ->max('total') ?? 0;
 
         $topUsers = (clone $query)
-            ->select('user')
+            ->selectRaw('tr_user as user')
             ->selectRaw('COUNT(*) as total')
-            ->groupBy('user')
+            ->groupBy('tr_user')
             ->orderByDesc('total')
             ->limit(10)
             ->get();

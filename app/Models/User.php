@@ -2,47 +2,67 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $table = 'mst_anggota';
+
+    protected $primaryKey = 'id_anggota';
+
+    public $timestamps = false;
+
     protected $fillable = [
-        'auth_type',
         'nik',
-        'name',
+        'nama',
         'email',
-        'password',
+        'password_hash',
+        'status_hapus',
+        'freeze',
+    ];
+
+    protected $hidden = [
+        'password_hash',
+        'remember_token',
+    ];
+
+    protected $appends = [
+        'name',
         'role',
         'is_active',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
+    public function getNameAttribute()
+    {
+        return $this->attributes['nama'] ?? null;
+    }
+
+    public function qadRole()
+    {
+        return $this->hasOne(QadUserRole::class, 'nik', 'nik');
+    }
+
+    public function getRoleAttribute()
+    {
+        return optional($this->qadRole)->role ?? 'viewer';
+    }
+
+    public function getIsActiveAttribute()
+    {
+        return (int) ($this->attributes['status_hapus'] ?? 1) === 1
+            && (int) ($this->attributes['freeze'] ?? 0) === 0;
+    }
+
+    public function getIdAttribute()
+    {
+        return $this->attributes['id_anggota'] ?? null;
+    }
 }

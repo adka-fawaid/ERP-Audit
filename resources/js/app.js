@@ -6,3 +6,5 @@ import './pages/chart'
 import './pages/anomaly-log';
 import './pages/matrix';
 import './pages/program-utilization';
+import './pages/activity-log';
+import './pages/export-modal';

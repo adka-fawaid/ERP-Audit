@@ -1,0 +1,13 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#7124
+    [34mid_anggota[39m: [35m2629[39m,
+    [34mnik[39m: [32m"[39m[32m044MG[39m[32m"[39m,
+    [34mnama[39m: [32m"[39m[32mMoh Adzka Fawaid[39m[32m"[39m,
+    [34mjenis_kelamin[39m: [35m0[39m,
+    [34memail[39m: [32m"[39m[32madkafawaid@gmail.com[39m[32m"[39m,
+    [34mstatus_hapus[39m: [35m1[39m,
+    [34mfreeze[39m: [35m0[39m,
+    #[33mpassword_hash[39m: [32m"[39m\$[32m2y[39m\$[32m10[39m\$[32mlWM.NXua8ciIzTNMSVa1OeJQFv30H9FJOffvYEyNUUdpu98F4UpVK[39m[32m"[39m,
+    +[1mname[22m: [32m"[39m[32mMoh Adzka Fawaid[39m[32m"[39m,
+    +[1mrole[22m: [32m"[39m[32madmin[39m[32m"[39m,
+    +[1mis_active[22m: [36mtrue[39m,
+  }

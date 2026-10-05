@@ -15,6 +15,7 @@ class AnomalyLogController extends Controller
         $search = trim($request->input('search', ''));
 
         $query = TrHist::whereRaw('DAYOFWEEK(trans_date) = 1');
+
         $years = (clone $query)
             ->whereNotNull('trans_date')
             ->selectRaw('YEAR(trans_date) as year')
@@ -32,20 +33,20 @@ class AnomalyLogController extends Controller
 
         $stats = (clone $query)
             ->selectRaw('COUNT(*) as total')
-            ->selectRaw('COUNT(DISTINCT user) as users')
+            ->selectRaw('COUNT(DISTINCT tr_user) as users')
             ->first();
 
         if ($search !== '') {
             $query->where(function ($q) use ($search) {
-                $q->where('user', 'like', "%{$search}%")
+                $q->where('tr_user', 'like', "%{$search}%")
                     ->orWhere('program', 'like', "%{$search}%");
             });
         }
 
         $users = (clone $query)
-            ->select('user')
+            ->select('tr_user')
             ->selectRaw('COUNT(*) as total')
-            ->groupBy('user')
+            ->groupBy('tr_user')
             ->orderByDesc('total')
             ->limit(10)
             ->get();

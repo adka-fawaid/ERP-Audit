@@ -12,6 +12,7 @@ class DashboardController extends Controller
     {
         $month = $request->input('month', now()->month);
         $year = $request->input('year', now()->year);
+
         $years = TrHist::query()
             ->whereNotNull('trans_date')
             ->selectRaw('YEAR(trans_date) as year')
@@ -32,8 +33,8 @@ class DashboardController extends Controller
         $totalTransactions = (clone $query)->count();
 
         $totalActiveUsers = (clone $query)
-            ->distinct('user')
-            ->count('user');
+            ->distinct('tr_user')
+            ->count('tr_user');
 
         $totalPrograms = (clone $query)
             ->distinct('program')

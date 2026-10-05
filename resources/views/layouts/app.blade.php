@@ -29,6 +29,7 @@
             </div>
         </div>
     </div>
+    @include('components.export-modal')
     @stack('scripts')
 </body>
 </html>

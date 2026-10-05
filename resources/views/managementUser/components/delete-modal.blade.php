@@ -6,11 +6,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v4m0 4h.01M10.29 3.86L2.82 17a2 2 0 001.74 3h14.88a2 2 0 001.74-3L13.71 3.86a2 2 0 00-3.42 0z" />
                 </svg>
             </div>
-            <h2 class="mt-4 text-lg font-bold text-gray-900">Hapus User?</h2>
-            <p class="mt-2 text-sm leading-6 text-gray-500">
-                Anda akan menghapus user <span id="deleteUserName" class="font-semibold text-gray-700">-</span>.
-                Tindakan ini tidak dapat dibatalkan.
-            </p>
+                <h2 class="mt-4 text-lg font-bold text-gray-900">Hapus Akses?</h2>
+                <p class="mt-2 text-sm leading-6 text-gray-500">
+                    Anda akan menghapus akses QAD untuk user
+                    <span id="deleteUserName" class="font-semibold text-gray-700">-</span>.
+                    Data user di master anggota perusahaan tidak akan dihapus.
+                </p>
             <div class="mt-6 flex gap-3">
                 <button type="button" onclick="closeDeleteModal()" class="flex-1 rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50">Batal</button>
                 <form id="deleteUserForm" method="POST" class="flex-1">

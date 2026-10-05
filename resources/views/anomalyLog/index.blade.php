@@ -1,35 +1,33 @@
 @extends('layouts.app')
-
 @section('title', 'Log Anomali')
-
 @section('content')
 <div class="space-y-6">
-
-    {{-- Header --}}
     <div class="flex items-start justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">Log Anomali</h1>
             <p class="mt-1 text-sm text-gray-500">Monitoring aktivitas transaksi yang terindikasi sebagai anomali.</p>
         </div>
-
-        <div class="flex gap-3">
-            <select id="monthFilter" class="h-10 min-w-[160px] rounded-lg border border-gray-200 px-3 text-sm">
-                <option value="all">Semua Bulan</option>
-                @foreach(range(1, 12) as $m)
-                    <option value="{{ $m }}" {{ $month == $m ? 'selected' : '' }}>{{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}</option>
-                @endforeach
-            </select>
-
-            <select id="yearFilter" class="h-10 min-w-[140px] rounded-lg border border-gray-200 px-3 text-sm">
-                <option value="all">Semua Tahun</option>
-                @foreach($years as $y)
-                    <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
-                @endforeach
-            </select>
-        </div>
+            <div class="flex gap-3">
+                <select id="monthFilter"
+                        class="h-10 min-w-[160px] rounded-lg border border-gray-200 bg-gray-100 px-3 text-sm text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+                    <option value="all" {{ $month == 'all' ? 'selected' : '' }}>Semua Bulan</option>
+                    @foreach(range(1, 12) as $m)
+                        <option value="{{ $m }}" {{ (string) $month === (string) $m ? 'selected' : '' }}>
+                            {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+                        </option>
+                    @endforeach
+                </select>
+                <select id="yearFilter"
+                        class="h-10 min-w-[140px] rounded-lg border border-gray-200 bg-gray-100 px-3 text-sm text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+                    <option value="all" {{ $year == 'all' ? 'selected' : '' }}>Semua Tahun</option>
+                    @foreach($years as $y)
+                        <option value="{{ $y }}" {{ (string) $year === (string) $y ? 'selected' : '' }}>
+                            {{ $y }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
     </div>
-
-    {{-- KPI --}}
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         @foreach([
             ['Total Anomali', $totalAnomalies, 'fa-triangle-exclamation', 'red'],
@@ -49,8 +47,6 @@
             </div>
         @endforeach
     </div>
-
-    {{-- Chart --}}
     <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <h2 class="font-semibold text-gray-900">Anomali Berdasarkan User</h2>
         <p class="mt-1 text-xs text-gray-400">Top 10 user berdasarkan jumlah aktivitas Minggu.</p>
@@ -58,34 +54,23 @@
             <canvas id="anomalyUserChart"></canvas>
         </div>
     </div>
-
-    {{-- Table --}}
     <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
         <div class="flex items-center justify-between border-b border-gray-100 px-6 py-5">
             <div>
                 <h2 class="font-semibold text-gray-900">Daftar Log Anomali</h2>
                 <p class="mt-1 text-xs text-gray-400">Seluruh aktivitas yang terjadi pada hari Minggu.</p>
             </div>
-
-            <button class="flex h-9 items-center gap-2 rounded-lg border border-gray-200 px-3 text-sm text-gray-600 hover:bg-gray-50">
+            <button type="button" data-export-url="{{ route('anomalyLog.export') }}" data-export-report="Log Anomali" class="flex h-9 items-center gap-2 rounded-lg border border-gray-200 px-3 text-sm text-gray-600 hover:bg-gray-50">
                 <i class="fa-solid fa-file-excel text-green-600"></i>
                 Export Excel
             </button>
         </div>
-
-        {{-- Search --}}
         <div class="border-b border-gray-100 px-6 py-4">
             <div class="flex h-10 max-w-md items-center rounded-lg border border-gray-200 focus-within:border-blue-500">
                 <i class="fa-solid fa-magnifying-glass ml-3 text-sm text-gray-400"></i>
-                <input
-                    id="anomalySearch"
-                    value="{{ $search }}"
-                    placeholder="Cari user atau program..."
-                    class="h-full flex-1 border-0 px-3 text-sm outline-none focus:ring-0"
-                >
+                <input id="anomalySearch" value="{{ $search }}" placeholder="Cari user atau program..." class="h-full flex-1 border-0 px-3 text-sm outline-none focus:ring-0">
             </div>
         </div>
-
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead class="border-b border-gray-100 bg-gray-50">
@@ -95,7 +80,6 @@
                         @endforeach
                     </tr>
                 </thead>
-
                 <tbody class="divide-y divide-gray-100">
                     @forelse($anomalies as $i => $anomaly)
                         <tr class="hover:bg-gray-50">
@@ -122,15 +106,12 @@
                 </tbody>
             </table>
         </div>
-
         @if($anomalies->hasPages())
             <div class="border-t border-gray-100 px-6 py-4">{{ $anomalies->links() }}</div>
         @endif
     </div>
-
 </div>
 @endsection
-
 @push('scripts')
 <script>
     window.anomalyLogData = {

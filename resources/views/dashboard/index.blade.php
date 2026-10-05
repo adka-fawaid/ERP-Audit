@@ -2,26 +2,39 @@
 @section('title', 'Dashboard Utama - QAD Audit')
 @section('page-title', 'Dashboard Utama')
 @section('content')
-
 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
     <div>
         <h1 class="text-2xl font-bold text-gray-900">Dashboard Utama</h1>
         <p class="text-sm text-gray-500 mt-1">Monitoring dan audit utilisasi ERP QAD</p>
     </div>
-    <form method="GET" action="{{ route('dashboard') }}" class="flex gap-3">
-        <select name="month" onchange="this.form.submit()" class="bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500">
-            <option value="all" {{ $month === 'all' ? 'selected' : '' }}>Semua Bulan</option>
-            @foreach(range(1, 12) as $m)
-                <option value="{{ $m }}" {{ (string) $month === (string) $m ? 'selected' : '' }}>{{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}</option>
-            @endforeach
-        </select>
-        <select name="year" onchange="this.form.submit()" class="bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500">
-            <option value="all" {{ $year === 'all' ? 'selected' : '' }}>Semua Tahun</option>
-            @foreach($years as $y)
-                <option value="{{ $y }}" {{ (string) $year === (string) $y ? 'selected' : '' }}>{{ $y }}</option>
-            @endforeach
-        </select>
-    </form>
+    <div class="flex gap-3">
+        <form method="GET" action="{{ route('dashboard') }}" class="flex gap-3">
+            <select name="month"
+                    onchange="this.form.submit()"
+                    class="h-10 min-w-[160px] rounded-lg border border-gray-200 bg-gray-100 px-3 text-sm text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+                <option value="all" {{ $month == 'all' ? 'selected' : '' }}>Semua Bulan</option>
+                @foreach(range(1, 12) as $m)
+                    <option value="{{ $m }}" {{ (string) $month === (string) $m ? 'selected' : '' }}>
+                        {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+                    </option>
+                @endforeach
+            </select>
+            <select name="year"
+                    onchange="this.form.submit()"
+                    class="h-10 min-w-[140px] rounded-lg border border-gray-200 bg-gray-100 px-3 text-sm text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+                <option value="all" {{ $year == 'all' ? 'selected' : '' }}>Semua Tahun</option>
+                @foreach($years as $y)
+                    <option value="{{ $y }}" {{ (string) $year === (string) $y ? 'selected' : '' }}>
+                        {{ $y }}
+                    </option>
+                @endforeach
+            </select>
+        </form>
+        <button type="button" data-export-url="{{ route('dashboard.export') }}" data-export-report="Dashboard" class="flex h-10 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+            <i class="fa-solid fa-file-excel text-green-600"></i>
+            Export Excel
+        </button>
+    </div>
 </div>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
@@ -56,10 +69,8 @@
                 </svg>
             </div>
         </div>
-
         <p class="text-xs text-green-600 mt-3">User dengan aktivitas</p>
     </div>
-
     <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
         <div class="flex items-start justify-between">
             <div>
@@ -93,11 +104,9 @@
 
         <p class="text-xs text-red-500 mt-3">ANOMALI</p>
     </div>
-
 </div>
 
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
     <div class="xl:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
         <div class="flex justify-between items-center mb-6">
             <div>
@@ -109,7 +118,6 @@
             <canvas id="dailyTransactionChart"></canvas>
         </div>
     </div>
-
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
         <h2 class="font-semibold text-gray-900">Distribusi Trans Type</h2>
         <p class="text-xs text-gray-400 mt-1 mb-6">Berdasarkan periode terpilih</p>
@@ -117,9 +125,7 @@
             <canvas id="transTypeChart"></canvas>
         </div>
     </div>
-
 </div>
-
 <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mt-6">
     <div class="flex justify-between items-center mb-5">
         <div>
@@ -133,7 +139,6 @@
             <canvas id="topProgramChart"></canvas>
     </div>
 </div>
-
 @endsection
 @push('scripts')
 <script>
