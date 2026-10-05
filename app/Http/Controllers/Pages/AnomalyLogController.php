@@ -13,7 +13,6 @@ class AnomalyLogController extends Controller
         $month = $request->input('month', now()->month);
         $year = $request->input('year', now()->year);
         $search = trim($request->input('search', ''));
-
         $query = TrHist::whereRaw('DAYOFWEEK(trans_date) = 1');
 
         $years = (clone $query)

@@ -17,17 +17,14 @@
                         </option>
                     @endforeach
                 </select>
-
                 <select name="year" id="year" class="h-10 min-w-[140px] rounded-lg border border-gray-200 bg-gray-100 px-3 text-sm text-gray-700 focus:border-blue-500 focus:ring-blue-500">
                     <option value="all" {{ $year == 'all' ? 'selected' : '' }}>Semua Tahun</option>
-
                     @foreach($years as $yearOption)
                         <option value="{{ $yearOption }}" {{ (string) $year === (string) $yearOption ? 'selected' : '' }}>
                             {{ $yearOption }}
                         </option>
                     @endforeach
                 </select>
-
                 <input type="hidden" name="search" value="{{ $search }}">
                 <input type="hidden" name="status" value="{{ $status }}">
             </form>
@@ -39,7 +36,6 @@
                     <p class="text-xs font-medium uppercase tracking-wide text-gray-400">Total Program</p>
                     <p class="mt-2 text-2xl font-bold text-gray-900">{{ number_format($totalPrograms) }}</p>
                 </div>
-
                 <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                     <i class="fa-solid fa-window-maximize text-lg"></i>
                 </div>
@@ -51,7 +47,6 @@
                     <p class="text-xs font-medium uppercase tracking-wide text-gray-400">Program Aktif</p>
                     <p class="mt-2 text-2xl font-bold text-gray-900">{{ number_format($activePrograms) }}</p>
                 </div>
-
                 <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-green-50 text-green-600">
                     <i class="fa-solid fa-circle-check text-lg"></i>
                 </div>
@@ -63,7 +58,6 @@
                     <p class="text-xs font-medium uppercase tracking-wide text-gray-400">Program Jarang</p>
                     <p class="mt-2 text-2xl font-bold text-gray-900">{{ number_format($rarePrograms) }}</p>
                 </div>
-
                 <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
                     <i class="fa-solid fa-chart-simple text-lg"></i>
                 </div>
@@ -75,13 +69,11 @@
                     <p class="text-xs font-medium uppercase tracking-wide text-gray-400">Total Transaksi</p>
                     <p class="mt-2 text-2xl font-bold text-gray-900">{{ number_format($totalTransactions) }}</p>
                 </div>
-
                 <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
                     <i class="fa-solid fa-arrow-right-arrow-left text-lg"></i>
                 </div>
             </div>
         </div>
-
     </div>
     <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
         <div class="flex flex-col gap-4 border-b border-gray-100 px-6 py-5 lg:flex-row lg:items-center lg:justify-between">

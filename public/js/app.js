@@ -35915,7 +35915,7 @@ function _showUser() {
         case 0:
           _context.p = 0;
           _context.n = 1;
-          return fetch("managementUser/".concat(id), {
+          return fetch("/managementUser/".concat(id), {
             headers: {
               Accept: 'application/json',
               'X-Requested-With': 'XMLHttpRequest'
@@ -35975,7 +35975,7 @@ function _editUser() {
         case 0:
           _context2.p = 0;
           _context2.n = 1;
-          return fetch("managementUser/".concat(id), {
+          return fetch("/managementUser/".concat(id), {
             headers: {
               Accept: 'application/json',
               'X-Requested-With': 'XMLHttpRequest'
@@ -35993,7 +35993,7 @@ function _editUser() {
           return response.json();
         case 3:
           user = _context2.v;
-          document.getElementById('editUserForm').action = "managementUser/".concat(id);
+          document.getElementById('editUserForm').action = "/managementUser/".concat(id);
           document.getElementById('editNik').value = user.nik || '';
           document.getElementById('editName').value = user.name || '';
           document.getElementById('editRole').value = user.role || 'viewer';
@@ -36028,7 +36028,7 @@ function deleteUser(id, name) {
   var form = document.getElementById('deleteUserForm');
   var userName = document.getElementById('deleteUserName');
   if (!modal || !form || !userName) return;
-  form.action = "managementUser/".concat(id);
+  form.action = "/managementUser/".concat(id);
   userName.textContent = name;
   modal.classList.remove('hidden');
   modal.classList.add('flex');
@@ -36051,8 +36051,11 @@ document.addEventListener('DOMContentLoaded', function () {
       searchForm === null || searchForm === void 0 || searchForm.submit();
     }, 400);
   });
-  var filters = document.querySelectorAll('select[name="role"], select[name="status"]');
-  filters.forEach(function (filter) {
+
+  // Hanya filter di dalam form pencarian yang auto-submit.
+  // Dropdown role/status di modal Edit tidak ikut refresh.
+  var filters = searchForm === null || searchForm === void 0 ? void 0 : searchForm.querySelectorAll('select[name="role"], select[name="status"]');
+  filters === null || filters === void 0 || filters.forEach(function (filter) {
     filter.addEventListener('change', function () {
       searchForm === null || searchForm === void 0 || searchForm.submit();
     });

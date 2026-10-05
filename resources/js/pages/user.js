@@ -20,7 +20,7 @@ function closeModal() {
 
 async function showUser(id) {
     try {
-        const response = await fetch(`managementUser/${id}`, {
+        const response = await fetch(`/managementUser/${id}`, {
             headers: {
                 Accept: 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
@@ -70,7 +70,7 @@ function closeViewModal() {
 
 async function editUser(id) {
     try {
-        const response = await fetch(`managementUser/${id}`, {
+        const response = await fetch(`/managementUser/${id}`, {
             headers: {
                 Accept: 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
@@ -83,7 +83,9 @@ async function editUser(id) {
 
         const user = await response.json();
 
-        document.getElementById('editUserForm').action = `managementUser/${id}`;
+        document.getElementById('editUserForm').action =
+            `/managementUser/${id}`;
+
         document.getElementById('editNik').value = user.nik || '';
         document.getElementById('editName').value = user.name || '';
         document.getElementById('editRole').value = user.role || 'viewer';
@@ -118,7 +120,7 @@ function deleteUser(id, name) {
 
     if (!modal || !form || !userName) return;
 
-    form.action = `managementUser/${id}`;
+    form.action = `/managementUser/${id}`;
     userName.textContent = name;
 
     modal.classList.remove('hidden');
@@ -137,7 +139,6 @@ function closeDeleteModal() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-
     const searchInput = document.querySelector('input[name="search"]');
     const searchForm = searchInput?.closest('form');
 
@@ -150,12 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
             searchForm?.submit();
         }, 400);
     });
-
-    const filters = document.querySelectorAll(
+    const filters = searchForm?.querySelectorAll(
         'select[name="role"], select[name="status"]'
     );
 
-    filters.forEach(filter => {
+    filters?.forEach(filter => {
         filter.addEventListener('change', () => {
             searchForm?.submit();
         });
