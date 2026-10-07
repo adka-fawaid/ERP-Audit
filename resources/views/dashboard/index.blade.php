@@ -52,14 +52,22 @@
                 </svg>
             </div>
         </div>
+        <div class="mt-3 flex items-center justify-between gap-3">
+            <p class="text-xs text-green-600">
+                Periode {{ $month === 'all' && $year === 'all' ? 'Semua Periode' : ($month === 'all' ? 'Semua Bulan ' . $year : ($year === 'all' ? \Carbon\Carbon::create()->month($month)->translatedFormat('F') . ' Semua Tahun' : \Carbon\Carbon::create($year, $month)->translatedFormat('F Y'))) }}
+            </p>
 
-        <p class="text-xs text-green-600 mt-3">Periode {{ $month === 'all' && $year === 'all' ? 'Semua Periode' : ($month === 'all' ? 'Semua Bulan ' . $year : ($year === 'all' ? \Carbon\Carbon::create()->month($month)->translatedFormat('F') . ' Semua Tahun' : \Carbon\Carbon::create($year, $month)->translatedFormat('F Y'))) }}</p>
+            <a href="{{ route('transaction.index', request()->only(['month', 'year'])) }}"
+            class="shrink-0 text-xs font-medium text-blue-600 hover:text-blue-700">
+                Lihat Detail →
+            </a>
+        </div>
     </div>
 
     <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
         <div class="flex items-start justify-between">
             <div>
-                <p class="text-sm text-gray-500">Total User Aktif</p>
+                <p class="text-sm text-gray-500">Total User QAD</p>
                 <h3 class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($totalActiveUsers) }}</h3>
             </div>
 
@@ -69,7 +77,15 @@
                 </svg>
             </div>
         </div>
-        <p class="text-xs text-green-600 mt-3">User dengan aktivitas</p>
+        <div class="mt-3 flex items-center justify-between gap-3">
+            <p class="text-xs text-green-600">
+                User dengan aktivitas
+            </p>
+            <a href="{{ route('qadUser.index', request()->only(['month', 'year'])) }}"
+            class="shrink-0 text-xs font-medium text-blue-600 hover:text-blue-700">
+                Lihat Detail →
+            </a>
+        </div>
     </div>
     <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
         <div class="flex items-start justify-between">
@@ -85,7 +101,16 @@
             </div>
         </div>
 
-        <p class="text-xs text-gray-400 mt-3">Program dengan aktivitas</p>
+        <div class="mt-3 flex items-center justify-between gap-3">
+            <p class="text-xs text-gray-400">
+                Program dengan aktivitas
+            </p>
+
+            <a href="{{ route('programUtilization.index', request()->only(['month', 'year'])) }}"
+            class="shrink-0 text-xs font-medium text-blue-600 hover:text-blue-700">
+                Lihat Detail →
+            </a>
+        </div>
     </div>
 
     <div class="bg-white rounded-xl border border-red-200 p-5 shadow-sm">
@@ -102,7 +127,16 @@
             </div>
         </div>
 
-        <p class="text-xs text-red-500 mt-3">ANOMALI</p>
+        <div class="mt-3 flex items-center justify-between gap-3">
+            <p class="text-xs text-red-500">
+                ANOMALI
+            </p>
+
+            <a href="{{ route('anomalyLog.index', request()->only(['month', 'year'])) }}"
+            class="shrink-0 text-xs font-medium text-red-600 hover:text-red-700">
+                Lihat Detail →
+            </a>
+        </div>
     </div>
 </div>
 

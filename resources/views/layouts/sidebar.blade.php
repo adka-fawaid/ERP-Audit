@@ -11,6 +11,12 @@
             <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' }}">
                 <i class="fa-solid fa-chart-column w-5 text-center text-[17px] text-gray-500"></i>
                 <span>Dashboard</span></a>
+            <a href="{{ route('transaction.index') }}" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition {{ request()->routeIs('transaction.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' }}">
+                <i class="fa-solid fa-arrow-right-arrow-left w-5 text-center text-[17px] text-gray-500"></i>
+                <span>Total Transaksi</span></a>
+            <a href="{{ route('qadUser.index') }}" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition {{ request()->routeIs('qadUser.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' }}">
+                <i class="fa-solid fa-users w-5 text-center text-[17px] text-gray-500"></i>
+                <span>User QAD</span></a>
             <a href="{{ route('programUtilization.index') }}" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition {{ request()->routeIs('programUtilization.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' }}">
                 <i class="fa-solid fa-chart-line w-5 text-center text-[17px] text-gray-500"></i>
                 <span>Utilisasi Program</span></a>

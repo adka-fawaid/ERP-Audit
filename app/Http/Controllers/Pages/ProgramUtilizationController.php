@@ -1,8 +1,7 @@
 <?php
-
 namespace App\Http\Controllers\Pages;
 
-use App\Http\Controllers\Controller;    
+use App\Http\Controllers\Controller;
 use App\Models\TrHist;
 use Illuminate\Http\Request;
 
@@ -10,10 +9,11 @@ class ProgramUtilizationController extends Controller
 {
     public function index(Request $request)
     {
-        $month = $request->input('month', now()->month);
-        $year = $request->input('year', now()->year);
-        $search = trim($request->input('search', ''));
-        $status = $request->input('status', 'all');
+        $month = $this->periodValue($request->input('month', now()->month), 1, 12, now()->month);
+        $year = $this->periodValue($request->input('year', now()->year), 2000, 2100, now()->year);
+        $program = $request->input('program') ?? '';
+        $transType = $request->input('trans_type') ?? '';
+        $status = $request->input('status') ?? 'all';
         $years = TrHist::query()
             ->whereNotNull('trans_date')
             ->selectRaw('YEAR(trans_date) as year')
@@ -21,59 +21,89 @@ class ProgramUtilizationController extends Controller
             ->orderByDesc('year')
             ->pluck('year');
 
-        $query = TrHist::query();
-
+        $baseQuery = TrHist::query();
         if ($month !== 'all') {
-            $query->whereMonth('trans_date', $month);
+            $baseQuery->whereMonth('trans_date', $month);
         }
-
         if ($year !== 'all') {
-            $query->whereYear('trans_date', $year);
+            $baseQuery->whereYear('trans_date', $year);
         }
-
-        $allPrograms = (clone $query)
+        $programTotals = (clone $baseQuery)
             ->select('program')
             ->selectRaw('COUNT(*) as total')
             ->groupBy('program')
-            ->get();
-
-        $totalPrograms = $allPrograms->count();
-        $activePrograms = $allPrograms->where('total', '>=', 50)->count();
-        $rarePrograms = $allPrograms->whereBetween('total', [1, 49])->count();
-        $totalTransactions = (clone $query)->count();
-
-        if ($search !== '') {
-            $query->where('program', 'like', '%' . $search . '%');
-        }
-        $programQuery = (clone $query)
+            ->get()
+            ->pluck('total', 'program');
+        $totalPrograms = $programTotals->count();
+        $activePrograms = $programTotals
+            ->filter(fn ($total) => $total >= 50)
+            ->count();
+        $rarePrograms = $programTotals
+            ->filter(fn ($total) => $total >= 1 && $total <= 49)
+            ->count();
+        $totalTransactions = (clone $baseQuery)->count();
+        $programsList = (clone $baseQuery)
+            ->whereNotNull('program')
             ->select('program')
-            ->selectRaw('COUNT(*) as total')
-            ->selectRaw("SUM(CASE WHEN trans_type = 'ISS-SO' THEN 1 ELSE 0 END) as iss_so")
-            ->selectRaw("SUM(CASE WHEN trans_type = 'RCT-PO' THEN 1 ELSE 0 END) as rct_po")
-            ->selectRaw("SUM(CASE WHEN trans_type = 'ISS-WO' THEN 1 ELSE 0 END) as iss_wo")
-            ->groupBy('program')
-            ->orderByDesc('total');
+            ->distinct()
+            ->orderBy('program')
+            ->pluck('program');
+        $transTypes = (clone $baseQuery)
+            ->whereNotNull('trans_type')
+            ->select('trans_type')
+            ->distinct()
+            ->orderBy('trans_type')
+            ->pluck('trans_type');
+        $query = clone $baseQuery;
+        if ($program !== '') {
+            $query->where('program', $program);
+        }
+        if ($transType !== '') {
+            $query->where('trans_type', $transType);
+        }
         if ($status === 'active') {
-            $programQuery->having('total', '>=', 50);
+            $activeProgramsList = $programTotals
+                ->filter(fn ($total) => $total >= 50)
+                ->keys();
+            $query->whereIn('program', $activeProgramsList);
         }
         if ($status === 'rare') {
-            $programQuery->havingBetween('total', [1, 49]);
+            $rareProgramsList = $programTotals
+                ->filter(fn ($total) => $total >= 1 && $total <= 49)
+                ->keys();
+            $query->whereIn('program', $rareProgramsList);
         }
-        $programs = $programQuery
+        $programs = $query
+            ->select('program', 'trans_type')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('program', 'trans_type')
+            ->orderByDesc('total')
             ->paginate(10)
             ->withQueryString();
-
         return view('programUtilization.index', compact(
             'month',
             'year',
             'years',
-            'search',
+            'program',
+            'transType',
             'status',
+            'programTotals',
+            'programsList',
+            'transTypes',
             'totalPrograms',
             'activePrograms',
             'rarePrograms',
             'totalTransactions',
             'programs'
         ));
+    }
+    private function periodValue($value, int $minimum, int $maximum, $fallback)
+    {
+        if ($value === 'all') {
+            return $value;
+        }
+        return is_numeric($value) && (int) $value >= $minimum && (int) $value <= $maximum
+            ? (int) $value
+            : $fallback;
     }
 }

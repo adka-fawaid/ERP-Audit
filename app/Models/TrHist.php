@@ -18,7 +18,7 @@ class TrHist extends Model
 
     protected $fillable = [
         'trans_number',
-        'user',
+        'tr_user',
         'trans_type',
         'program',
         'trans_date',

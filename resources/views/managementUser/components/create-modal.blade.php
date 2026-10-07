@@ -14,8 +14,15 @@
             @csrf
 
             <div class="mb-5">
-                <label for="nik" class="mb-2 block text-sm font-medium text-gray-700">NIK</label>
-                <input type="text" id="nik" name="nik" value="{{ old('nik') }}" placeholder="Masukkan NIK karyawan" required class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="nik" class="mb-2 block text-sm font-medium text-gray-700">Karyawan</label>
+                <select id="nik" name="nik" required class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Pilih NIK - Nama</option>
+                    @foreach($availableMembers as $member)
+                        <option value="{{ $member->nik }}" {{ old('nik') === $member->nik ? 'selected' : '' }}>
+                            {{ $member->nik }} - {{ $member->nama }}
+                        </option>
+                    @endforeach
+                </select>
                 <p class="mt-2 text-xs text-gray-400">
                     NIK akan dicocokkan dengan data master anggota perusahaan.
                 </p>

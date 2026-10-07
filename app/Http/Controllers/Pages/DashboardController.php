@@ -10,9 +10,8 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $month = $request->input('month', now()->month);
-        $year = $request->input('year', now()->year);
-
+        $month = $this->periodValue($request->input('month', now()->month), 1, 12, now()->month);
+        $year = $this->periodValue($request->input('year', now()->year), 2000, 2100, now()->year);
         $years = TrHist::query()
             ->whereNotNull('trans_date')
             ->selectRaw('YEAR(trans_date) as year')
@@ -64,5 +63,14 @@ class DashboardController extends Controller
             'topPrograms',
             'transTypes'
         ));
+    }
+    private function periodValue($value, int $minimum, int $maximum, $fallback)
+    {
+        if ($value === 'all') {
+            return $value;
+        }
+        return is_numeric($value) && (int) $value >= $minimum && (int) $value <= $maximum
+            ? (int) $value
+            : $fallback;
     }
 }

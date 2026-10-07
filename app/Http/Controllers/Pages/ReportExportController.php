@@ -14,7 +14,6 @@ class ReportExportController extends Controller
     public function dashboard(Request $request)
     {
         [$from, $to, $reason] = $this->exportOptions($request);
-
         $rows = TrHist::query()
             ->whereBetween('trans_date', [$from, $to])
             ->orderBy('trans_date')
@@ -47,7 +46,6 @@ class ReportExportController extends Controller
                 'Nomor Transaksi',
             ])
             ->all();
-
         return $this->download(
             $request,
             'Dashboard',
@@ -61,56 +59,158 @@ class ReportExportController extends Controller
         );
     }
 
+    public function transactions(Request $request)
+    {
+        [$from, $to, $reason] = $this->exportOptions($request);
+        $query = TrHist::query()
+            ->whereBetween('trans_date', [$from, $to]);
+        foreach (['trans_type', 'program', 'user'] as $filter) {
+            if (!$request->filled($filter)) {
+                continue;
+            }
+            $query->where($filter === 'user' ? 'tr_user' : $filter, $request->input($filter));
+        }
+        $rows = $query
+            ->orderByDesc('trans_date')
+            ->orderByDesc('trans_time')
+            ->get([
+                'trans_number',
+                'tr_user',
+                'program',
+                'trans_type',
+                'trans_date',
+                'trans_time',
+                'location',
+            ])
+            ->map(fn ($row, $index) => [
+                $index + 1,
+                $row->trans_number,
+                $row->tr_user,
+                $row->program,
+                $row->trans_type,
+                $row->trans_date,
+                $row->trans_time,
+                $row->location,
+            ])
+            ->prepend([
+                'No',
+                'Trans Number',
+                'User',
+                'Program',
+                'Trans Type',
+                'Tanggal',
+                'Waktu',
+                'Location',
+            ])
+            ->all();
+        return $this->download(
+            $request,
+            'Total Transaksi',
+            'qad-total-transaksi',
+            $from,
+            $to,
+            $reason,
+            [
+                ['name' => 'Transaksi', 'rows' => $rows],
+            ]
+        );
+    }
+
+    public function qadUsers(Request $request)
+    {
+        [$from, $to, $reason] = $this->exportOptions($request);
+        $query = TrHist::query()
+            ->whereBetween('trans_date', [$from, $to]);
+        if ($request->filled('user')) {
+            $query->where('tr_user', $request->input('user'));
+        }
+        $rows = $query
+            ->orderByDesc('trans_date')
+            ->orderByDesc('trans_time')
+            ->get([
+                'tr_user',
+                'trans_type',
+                'program',
+                'trans_date',
+                'trans_time',
+            ])
+            ->groupBy('tr_user')
+            ->sortByDesc(fn ($activities) => $activities->count())
+            ->values()
+            ->map(fn ($activities, $index) => [
+                $index + 1,
+                $activities->first()->tr_user,
+                $activities->count(),
+                $activities->first()->trans_type . ' - ' . $activities->first()->program,
+                $activities->first()->trans_date,
+                $activities->first()->trans_time,
+            ])
+            ->prepend([
+                'No',
+                'User',
+                'Total Transaksi',
+                'Aktivitas Terakhir',
+                'Tanggal',
+                'Waktu',
+            ])
+            ->all();
+        return $this->download(
+            $request,
+            'User QAD',
+            'qad-user-activity',
+            $from,
+            $to,
+            $reason,
+            [
+                ['name' => 'User QAD', 'rows' => $rows],
+            ]
+        );
+    }
     public function programUtilization(Request $request)
     {
         [$from, $to, $reason] = $this->exportOptions($request);
-
         $query = TrHist::query()
             ->whereBetween('trans_date', [$from, $to]);
-
-        if ($request->filled('search')) {
-            $query->where(
-                'program',
-                'like',
-                '%' . $request->input('search') . '%'
-            );
+        if ($request->filled('program')) {
+            $query->where('program', $request->input('program'));
         }
-
-        $programs = $query
+        $programTotals = (clone $query)
             ->select('program')
             ->selectRaw('COUNT(*) as total')
-            ->selectRaw("SUM(CASE WHEN trans_type = 'ISS-SO' THEN 1 ELSE 0 END) as iss_so")
-            ->selectRaw("SUM(CASE WHEN trans_type = 'RCT-PO' THEN 1 ELSE 0 END) as rct_po")
-            ->selectRaw("SUM(CASE WHEN trans_type = 'ISS-WO' THEN 1 ELSE 0 END) as iss_wo")
             ->groupBy('program')
-            ->orderByDesc('total');
-
-        if ($request->input('status') === 'active') {
-            $programs->having('total', '>=', 50);
-        } elseif ($request->input('status') === 'rare') {
-            $programs->havingBetween('total', [1, 49]);
-        }
-
-        $rows = $programs
             ->get()
-            ->map(fn ($program) => [
+            ->pluck('total', 'program');
+
+        if ($request->filled('trans_type')) {
+            $query->where('trans_type', $request->input('trans_type'));
+        }
+        $detailQuery = (clone $query)
+            ->select('program', 'trans_type')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('program', 'trans_type')
+            ->orderByDesc('total');
+        if ($request->input('status') === 'active') {
+            $detailQuery->whereIn('program', $programTotals->filter(fn ($total) => $total >= 50)->keys());
+        } elseif ($request->input('status') === 'rare') {
+            $detailQuery->whereIn('program', $programTotals->filter(fn ($total) => $total >= 1 && $total <= 49)->keys());
+        }
+        $rows = $detailQuery
+            ->get()
+            ->map(fn ($program, $index) => [
+                $index + 1,
                 $program->program,
+                $program->trans_type,
                 $program->total,
-                $program->iss_so,
-                $program->rct_po,
-                $program->iss_wo,
-                $program->total >= 50 ? 'Aktif' : 'Jarang',
+                $programTotals->get($program->program) >= 50 ? 'Aktif' : 'Jarang',
             ])
             ->prepend([
+                'No',
                 'Program',
+                'Trans Type',
                 'Total Transaksi',
-                'ISS-SO',
-                'RCT-PO',
-                'ISS-WO',
                 'Status',
             ])
             ->all();
-
         return $this->download(
             $request,
             'Utilisasi Program',
@@ -123,18 +223,14 @@ class ReportExportController extends Controller
             ]
         );
     }
-
     public function anomalyLog(Request $request)
     {
         [$from, $to, $reason] = $this->exportOptions($request);
-
         $query = TrHist::query()
             ->whereRaw('DAYOFWEEK(trans_date) = 1')
             ->whereBetween('trans_date', [$from, $to]);
-
         if ($request->filled('search')) {
             $search = $request->input('search');
-
             $query->where(function ($query) use ($search) {
                 $query->where(
                     'tr_user',
@@ -147,7 +243,6 @@ class ReportExportController extends Controller
                 );
             });
         }
-
         $rows = $query
             ->orderByDesc('trans_date')
             ->orderByDesc('trans_time')
@@ -178,7 +273,6 @@ class ReportExportController extends Controller
                 'Status',
             ])
             ->all();
-
         return $this->download(
             $request,
             'Log Anomali',
@@ -191,19 +285,14 @@ class ReportExportController extends Controller
             ]
         );
     }
-
     public function accessMatrix(Request $request)
     {
         [$from, $to, $reason] = $this->exportOptions($request);
-
         $query = TrHist::query()
             ->whereBetween('trans_date', [$from, $to]);
-
         $userSearch = $request->input('user', '');
         $programSearch = $request->input('program', '');
-
         $focusProgram = null;
-
         if ($programSearch !== '') {
             $focusProgram = (clone $query)
                 ->where(
@@ -217,13 +306,11 @@ class ReportExportController extends Controller
                 ->orderByDesc('total')
                 ->first();
         }
-
         if ($focusProgram) {
             $focusUsers = (clone $query)
                 ->where('program', $focusProgram->program)
                 ->distinct()
                 ->pluck('tr_user');
-
             $programs = (clone $query)
                 ->whereIn('tr_user', $focusUsers)
                 ->where('program', '!=', $focusProgram->program)
@@ -233,7 +320,6 @@ class ReportExportController extends Controller
                 ->orderByDesc('total')
                 ->limit(9)
                 ->pluck('program');
-
             $programs = collect([
                 $focusProgram->program,
             ])->merge($programs);
@@ -245,12 +331,9 @@ class ReportExportController extends Controller
                 ->orderByDesc('total')
                 ->limit(10)
                 ->pluck('program');
-
             $focusUsers = collect();
         }
-
         $usersQuery = clone $query;
-
         if ($userSearch !== '') {
             $usersQuery->where(
                 'tr_user',
@@ -258,17 +341,14 @@ class ReportExportController extends Controller
                 '%' . $userSearch . '%'
             );
         }
-
         if ($focusProgram) {
             $usersQuery->whereIn('tr_user', $focusUsers);
         }
-
         $users = $usersQuery
             ->select('tr_user')
             ->distinct()
             ->orderBy('tr_user')
             ->pluck('tr_user');
-
         $counts = (clone $query)
             ->whereIn('tr_user', $users)
             ->whereIn('program', $programs)
@@ -277,11 +357,9 @@ class ReportExportController extends Controller
             ->groupBy('tr_user', 'program')
             ->get()
             ->keyBy(fn ($row) => $row->tr_user . "\0" . $row->program);
-
         $matrixRows = [
             array_merge(['User'], $programs->all()),
         ];
-
         foreach ($users as $user) {
             $matrixRows[] = array_merge(
                 [$user],
@@ -292,7 +370,6 @@ class ReportExportController extends Controller
                     ->all()
             );
         }
-
         $details = (clone $query)
             ->whereIn('tr_user', $users)
             ->whereIn('program', $programs)
@@ -324,7 +401,6 @@ class ReportExportController extends Controller
                 'Location',
             ])
             ->all();
-
         return $this->download(
             $request,
             'Matriks Akses',
@@ -338,24 +414,20 @@ class ReportExportController extends Controller
             ]
         );
     }
-
     public function activityLog(Request $request)
     {
         [$from, $to, $reason] = $this->exportOptions($request);
-
         $query = ActivityLog::query()
             ->whereBetween('created_at', [
                 Carbon::parse($from)->startOfDay(),
                 Carbon::parse($to)->endOfDay(),
             ]);
-
         if ($request->filled('activity')) {
             $query->where(
                 'activity',
                 $request->input('activity')
             );
         }
-
         if ($request->filled('user')) {
             $query->where(
                 'user',
@@ -363,10 +435,8 @@ class ReportExportController extends Controller
                 '%' . $request->input('user') . '%'
             );
         }
-
         if ($request->filled('search')) {
             $search = $request->input('search');
-
             $query->where(function ($query) use ($search) {
                 $query->where(
                     'user',
@@ -390,7 +460,6 @@ class ReportExportController extends Controller
                 );
             });
         }
-
         $rows = $query
             ->latest()
             ->get([
@@ -418,7 +487,6 @@ class ReportExportController extends Controller
                 'Deskripsi',
             ])
             ->all();
-
         return $this->download(
             $request,
             'Log Aktivitas',
@@ -431,7 +499,6 @@ class ReportExportController extends Controller
             ]
         );
     }
-
     private function exportOptions(Request $request): array
     {
         $data = $request->validate([
@@ -448,7 +515,6 @@ class ReportExportController extends Controller
                 'max:1000',
             ],
         ]);
-
         $reasons = [
             'audit' => 'Audit',
             'department' => 'Kebutuhan Department',
@@ -457,14 +523,12 @@ class ReportExportController extends Controller
             'reporting' => 'Pelaporan',
             'other' => trim($data['reason_other'] ?? ''),
         ];
-
         return [
             $data['from_date'],
             $data['to_date'],
             $reasons[$data['reason']],
         ];
     }
-
     private function download(
         Request $request,
         string $report,
@@ -478,7 +542,6 @@ class ReportExportController extends Controller
             $filename . '-' . $from . '-' . $to . '.xlsx',
             $sheets
         );
-
         ActivityLog::record(
             $request,
             'EXPORT_REPORT',
@@ -487,7 +550,6 @@ class ReportExportController extends Controller
             ' - ' . Carbon::parse($to)->format('d/m/Y') .
             '. Alasan: ' . $reason . '.'
         );
-
         return $download;
     }
 }

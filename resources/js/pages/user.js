@@ -7,7 +7,6 @@ function openModal() {
     modal.classList.add('flex');
     document.body.classList.add('overflow-hidden');
 }
-
 function closeModal() {
     const modal = document.getElementById('addUserModal');
 
@@ -17,7 +16,6 @@ function closeModal() {
     modal.classList.add('hidden');
     document.body.classList.remove('overflow-hidden');
 }
-
 async function showUser(id) {
     try {
         const response = await fetch(`/managementUser/${id}`, {
@@ -32,22 +30,16 @@ async function showUser(id) {
         }
 
         const user = await response.json();
-
         document.getElementById('viewNik').textContent = user.nik || '-';
         document.getElementById('viewNikDetail').textContent = user.nik || '-';
         document.getElementById('viewName').textContent = user.name || '-';
-
         document.getElementById('viewRole').textContent =
             user.role === 'admin' ? 'Admin' : 'Viewer';
-
         document.getElementById('viewStatus').textContent =
             user.status === 'active' ? 'Aktif' : 'Nonaktif';
-
         document.getElementById('viewAvatar').textContent =
             user.name ? user.name.charAt(0).toUpperCase() : '-';
-
         const modal = document.getElementById('viewUserModal');
-
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         document.body.classList.add('overflow-hidden');

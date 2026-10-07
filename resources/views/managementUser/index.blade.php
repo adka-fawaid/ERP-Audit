@@ -76,7 +76,7 @@
 
     @include('managementUser.components.table')
 
-    @include('managementUser.components.create-modal')
+    @include('managementUser.components.create-modal', ['availableMembers' => $availableMembers])
 
     @include('managementUser.components.view-modal')
 

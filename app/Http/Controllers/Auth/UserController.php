@@ -39,13 +39,25 @@ class UserController extends Controller
             ->orderBy('mst_anggota.nama')
             ->paginate(10)
             ->withQueryString();
-        return view('managementUser.index', compact('users'));
+
+        $availableMembers = User::query()
+            ->where('status_hapus', 1)
+            ->where('freeze', 0)
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')
+                    ->from('qad_user_roles')
+                    ->whereColumn('qad_user_roles.nik', 'mst_anggota.nik');
+            })
+            ->orderBy('nama')
+            ->get(['nik', 'nama']);
+
+        return view('managementUser.index', compact('users', 'availableMembers'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nik' => ['required', 'string', 'max:255'],
+            'nik' => ['required', 'string', 'max:255', 'exists:mst_anggota,nik'],
             'role' => ['required', 'in:admin,viewer'],
         ]);
         $member = User::where('nik', $validated['nik'])->first();

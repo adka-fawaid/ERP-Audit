@@ -1,10 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const monthFilter = document.getElementById('month');
     const yearFilter = document.getElementById('year');
+    const programFilter = document.getElementById('programFilter');
+    const transTypeFilter = document.getElementById('transTypeFilter');
     const statusFilter = document.getElementById('statusFilter');
-    const searchInput = document.getElementById('programSearch');
 
-    if (!monthFilter || !yearFilter || !statusFilter || !searchInput) {
+    if (!monthFilter || !yearFilter || !programFilter || !transTypeFilter || !statusFilter) {
+        return;
+    }
+
+    if (monthFilter.hasAttribute('onchange')) {
         return;
     }
 
@@ -13,21 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         params.set('month', monthFilter.value);
         params.set('year', yearFilter.value);
-
-        const search = searchInput.value.trim();
+        params.set('program', programFilter.value);
+        params.set('trans_type', transTypeFilter.value);
         const status = statusFilter.value;
 
-        if (search) {
-            params.set('search', search);
-        } else {
-            params.delete('search');
-        }
-
-        if (status !== 'all') {
-            params.set('status', status);
-        } else {
-            params.delete('status');
-        }
+        params.set('status', status);
 
         params.delete('page');
 
@@ -36,12 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     monthFilter.addEventListener('change', applyFilter);
     yearFilter.addEventListener('change', applyFilter);
+    programFilter.addEventListener('change', applyFilter);
+    transTypeFilter.addEventListener('change', applyFilter);
     statusFilter.addEventListener('change', applyFilter);
-
-    let searchTimer;
-
-    searchInput.addEventListener('input', () => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(applyFilter, 400);
-    });
 });

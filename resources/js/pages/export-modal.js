@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             otherReason.value = '';
             form.querySelectorAll('[data-export-context]').forEach(input => input.remove());
 
-            const allowedFilters = ['search', 'status', 'user', 'program', 'activity'];
+            const allowedFilters = ['search', 'status', 'user', 'program', 'trans_type', 'activity'];
             new URLSearchParams(window.location.search).forEach((value, name) => {
                 if (!allowedFilters.includes(name) || !value) return;
 
